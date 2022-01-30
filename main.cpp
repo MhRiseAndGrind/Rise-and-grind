@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
     SearchParameters p;
-    p.AddSkill(24, 1);
+    p.AddSkill(71, 2);
     setEngine.FindSets(p, 10);
     return app.exec();
 }

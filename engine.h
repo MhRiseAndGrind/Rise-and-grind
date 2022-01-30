@@ -28,7 +28,7 @@ public:
      * @param Max number of results to find
      * @return QVector containing the armor sets
      */
-    vector<ArmorSet> * FindSets(SearchParameters &params, qint16 maxCount);
+    vector<ArmorSet> FindSets(SearchParameters &params, qint16 maxCount);
 signals:
 
 private:
@@ -47,13 +47,13 @@ private:
      * @brief 7-set cartesian product
      * @return Vector of armorsets such that there is every single combination of the input sets such that one from each category is chosen
      */
-    vector<ArmorSet> CartesianProduct(vector<ArmorPiece> headPieces,
-                                        vector<ArmorPiece> bodyPieces,
-                                        vector<ArmorPiece> armPieces,
-                                        vector<ArmorPiece> waistPieces,
-                                        vector<ArmorPiece> legPieces,
-                                        vector<Weapon> weapons,
-                                        vector<Talisman> talismans);
+    vector<ArmorSet> CartesianProduct(vector<ArmorPiece> &headPieces,
+                                        vector<ArmorPiece> &bodyPieces,
+                                        vector<ArmorPiece> &armPieces,
+                                        vector<ArmorPiece> &waistPieces,
+                                        vector<ArmorPiece> &legPieces,
+                                        vector<Weapon> &weapons,
+                                        vector<Talisman> &talismans);
 };
 
 #endif // ENGINE_H

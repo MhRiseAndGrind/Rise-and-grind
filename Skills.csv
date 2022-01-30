@@ -1,105 +1,106 @@
-﻿ID,Name
-0,Affinity Sliding
-1,Agitator
-2,Aim Booster
-3,Ammo Up
-4,Artillery
-5,Attack Boost
-6,Blast Attack
-7,Blast Resistance
-8,Blight Resistance
-9,Bludgeoneer
-10,Bombardier
-11,Botanist
-12,Bow Charge Plus
-13,Bubbly Dance
-14,Capture Master
-15,Carving Pro
-16,Constitution
-17,Counterstrike
-18,Critical Boost
-19,Critical Draw
-20,Critical Element
-21,Critical Eye
-22,Defense Boost
-23,Diversion
-24,Divine Blessing
-25,Dragon Attack
-26,Dragon Resistance
-27,Earplugs
-28,Evade Extender
-29,Evade Window
-30,Fire Attack
-31,Fire Resistance
-32,Flinch Free
-33,Focus
-34,Fortify
-35,Free Meal
-36,Geologist
-37,Good Luck
-38,Guard
-39,Guard Up
-40,Handicraft
-41,Hellfire Cloak
-42,Heroics
-43,Horn Maestro
-44,Hunger Resistance
-45,Ice Attack
-46,Ice Resistance
-47,Item Prolonger
-48,Jump Master
-49,Latent Power
-50,Leap of Faith
-51,Load Shells
-52,Marathon Runner
-53,Master Mounter
-54,Maximum Might
-55,Mind's Eye
-56,Muck Resistance
-57,Mushroomancer
-58,Normal/Rapid Up
-59,Offensive Guard
-60,Paralysis Attack
-61,Paralysis Resistance
-62,Partbreaker
-63,Peak Performance
-64,Pierce Up
-65,Poison Attack
-66,Poison Resistance
-67,Power Prolonger
-68,Protective Polish
-69,Punishing Draw
-70,Quick Sheath
-71,Rapid Fire Up
-72,Rapid Morph
-73,Razor Sharp
-74,Recoil Down
-75,Recovery Speed
-76,Recovery Up
-77,Reload Speed
-78,Resentment
-79,Resuscitate
-80,Sleep Attack
-81,Sleep Resistance
-82,Slugger
-83,Spare Shot
-84,Special Ammo Boost
-85,Speed Eating
-86,Speed Sharpening
-87,Spread Up
-88,Stamina Surge
-89,Stamina Thief
-90,Steadiness
-91,Stun Resistance
-92,Thunder Alignment
-93,Thunder Attack
-94,Thunder Resistance
-95,Tremor Resistance
-96,Wall Runner
-97,Water Attack
-98,Water Resistance
-99,Weakness Exploit
-100,Wide-Range
-101,Wind Alignment
-102,Windproof
-103,Wirebug Whisperer
+ID,Name
+0,No Skill
+1,Affinity Sliding
+2,Agitator
+3,Aim Booster
+4,Ammo Up
+5,Artillery
+6,Attack Boost
+7,Blast Attack
+8,Blast Resistance
+9,Blight Resistance
+10,Bludgeoneer
+11,Bombardier
+12,Botanist
+13,Bow Charge Plus
+14,Bubbly Dance
+15,Capture Master
+16,Carving Pro
+17,Constitution
+18,Counterstrike
+19,Critical Boost
+20,Critical Draw
+21,Critical Element
+22,Critical Eye
+23,Defense Boost
+24,Diversion
+25,Divine Blessing
+26,Dragon Attack
+27,Dragon Resistance
+28,Earplugs
+29,Evade Extender
+30,Evade Window
+31,Fire Attack
+32,Fire Resistance
+33,Flinch Free
+34,Focus
+35,Fortify
+36,Free Meal
+37,Geologist
+38,Good Luck
+39,Guard
+40,Guard Up
+41,Handicraft
+42,Hellfire Cloak
+43,Heroics
+44,Horn Maestro
+45,Hunger Resistance
+46,Ice Attack
+47,Ice Resistance
+48,Item Prolonger
+49,Jump Master
+50,Latent Power
+51,Leap of Faith
+52,Load Shells
+53,Marathon Runner
+54,Master Mounter
+55,Maximum Might
+56,Mind's Eye
+57,Muck Resistance
+58,Mushroomancer
+59,Normal/Rapid Up
+60,Offensive Guard
+61,Paralysis Attack
+62,Paralysis Resistance
+63,Partbreaker
+64,Peak Performance
+65,Pierce Up
+66,Poison Attack
+67,Poison Resistance
+68,Power Prolonger
+69,Protective Polish
+70,Punishing Draw
+71,Quick Sheath
+72,Rapid Fire Up
+73,Rapid Morph
+74,Razor Sharp
+75,Recoil Down
+76,Recovery Speed
+77,Recovery Up
+78,Reload Speed
+79,Resentment
+80,Resuscitate
+81,Sleep Attack
+82,Sleep Resistance
+83,Slugger
+84,Spare Shot
+85,Special Ammo Boost
+86,Speed Eating
+87,Speed Sharpening
+88,Spread Up
+89,Stamina Surge
+90,Stamina Thief
+91,Steadiness
+92,Stun Resistance
+93,Thunder Alignment
+94,Thunder Attack
+95,Thunder Resistance
+96,Tremor Resistance
+97,Wall Runner
+98,Water Attack
+99,Water Resistance
+100,Weakness Exploit
+101,Wide-Range
+102,Wind Alignment
+103,Windproof
+104,Wirebug Whisperer
