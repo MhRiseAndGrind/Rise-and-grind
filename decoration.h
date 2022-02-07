@@ -10,21 +10,33 @@ class Decoration
 {
 public:
     explicit Decoration();
+    /**
+     * @brief Decoration constructor
+     * @param decoId ID of the decoration from CSV
+     * @param slotLevel Slot level of the decoration (1, 2, 3)
+     * @param skill Reference to the skill the decoration maps to
+     * @param name Name of the decoration
+     */
+    Decoration(qint16 decoId, qint16 slotLevel, Skill & skill, QString name);
+    qint16 getDecoLevel();
+    ~Decoration();
 private:
     /**
      * @brief Decoration ID (internal use for searching)
      */
     qint16 decoID;
     /**
-     * @brief Skill this decoration represents
+     * @brief Pointer to the skill the decoration has
      */
-    Skill skill;
+    Skill * skill;
     /**
      * @brief Level of the decoration (1-3)
      */
     qint16 decoLevel;
-signals:
-
+    /**
+     * @brief Name of the decoration
+     */
+    QString name;
 };
 
 #endif // DECORATION_H

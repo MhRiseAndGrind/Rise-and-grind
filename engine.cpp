@@ -14,11 +14,11 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
     // Candidates should match any of the params
     //IE even though the minimum skill may be 3, we want all sets with that skill regardless
     // If the piece also has slots >= the skill deco, add that too
-    vector<ArmorPiece> headCandidates;
-    vector<ArmorPiece> torsoCandidates;
-    vector<ArmorPiece> armsCandidates;
-    vector<ArmorPiece> waistCandidates;
-    vector<ArmorPiece> legsCandidates;
+    vector<ArmorPiece *> headCandidates;
+    vector<ArmorPiece *> torsoCandidates;
+    vector<ArmorPiece *> armsCandidates;
+    vector<ArmorPiece *> waistCandidates;
+    vector<ArmorPiece *> legsCandidates;
     vector<Weapon> weaponCandidates;
     vector<Talisman> talismanCandidates;
     // Go over every skill and level and append them to the appropriate vector
@@ -30,31 +30,31 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
         auto legTmp = FindCandidates(params.skillIds[i], 1, ArmorPiece::LEGS);
         // evil copy pasted code
         for (int j = 0; j < (int) headTmp.size(); j++)
-            headCandidates.push_back(headTmp.at(i));
+            headCandidates.push_back(headTmp.at(j));
 
         for (int j = 0; j < (int) torsoTmp.size(); j++)
-            torsoCandidates.push_back(torsoTmp.at(i));
+            torsoCandidates.push_back(torsoTmp.at(j));
 
         for (int j = 0; j < (int) armTmp.size(); j++)
-            armsCandidates.push_back(armTmp.at(i));
+            armsCandidates.push_back(armTmp.at(j));
 
         for (int j = 0; j < (int) waistTmp.size(); j++)
-            waistCandidates.push_back(waistTmp.at(i));
+            waistCandidates.push_back(waistTmp.at(j));
 
         for (int j = 0; j < (int) legTmp.size(); j++)
-            legsCandidates.push_back(legTmp.at(i));
+            legsCandidates.push_back(legTmp.at(j));
     }
     // Search the weapons and talismans next
 
 
     // Add a No Armor armor piece to each category (prevents idx oob error in cartesian product search)
-    qint16 emptySlots[] = {0,0,0};
-    headCandidates.push_back(ArmorPiece(0, "No Head Piece", ArmorPiece::HEAD, 0, 0, 0, emptySlots));
-    torsoCandidates.push_back(ArmorPiece(1, "No Torso Piece", ArmorPiece::TORSO, 0, 0, 0, emptySlots));
-    armsCandidates.push_back(ArmorPiece(2, "No Arm Piece", ArmorPiece::ARMS, 0, 0, 0, emptySlots));
-    waistCandidates.push_back(ArmorPiece(3, "No Waist Piece", ArmorPiece::WAIST, 0, 0, 0, emptySlots));
-    legsCandidates.push_back(ArmorPiece(4, "No Leg Piece", ArmorPiece::LEGS, 0, 0, 0, emptySlots));
-    // TODO: Handle weapons and talismans
+    vector<qint16> emptySlots = {0,0,0};
+    headCandidates.push_back(new ArmorPiece(0, "No Head Piece", ArmorPiece::HEAD, vector<qint16>(), vector<qint16>(), emptySlots, vector<Skill *>()));
+    torsoCandidates.push_back(new ArmorPiece(1, "No Torso Piece", ArmorPiece::TORSO, vector<qint16>(), vector<qint16>(), emptySlots, vector<Skill *>()));
+    armsCandidates.push_back(new ArmorPiece(2, "No Arm Piece", ArmorPiece::ARMS, vector<qint16>(), vector<qint16>(), emptySlots, vector<Skill *>()));
+    waistCandidates.push_back(new ArmorPiece(3, "No Waist Piece", ArmorPiece::WAIST, vector<qint16>(), vector<qint16>(), emptySlots, vector<Skill *>()));
+    legsCandidates.push_back(new ArmorPiece(4, "No Leg Piece", ArmorPiece::LEGS, vector<qint16>(), vector<qint16>(), emptySlots, vector<Skill *>()));
+    // TODO: Handle weapons and talismans, weapons should just be a slot choice
     // Find every combination
     foundSets = Engine::CartesianProduct(headCandidates,
                                          torsoCandidates,
@@ -62,18 +62,56 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
                                          waistCandidates,
                                          legsCandidates,
                                          weaponCandidates,
-                                         talismanCandidates);
+                                         talismanCandidates,
+                                         maxCount);
     qDebug() << "Found" << foundSets.size() << "unique sets";
     // Now filter the sets based on our search parameters
     // Since the initial set search accounted for any skill levels of the skills we want
     // we now all the sets that at least match the skill levels we want
-    // TODO:
-    return foundSets;
+
+    // Create a convenient report of all of the found sets
+    vector<ArmorSet> matchingSets = vector<ArmorSet>();
+    for (auto & armorSet : foundSets) {
+        if (ValidSetCheck(armorSet, params)) {
+            matchingSets.push_back(armorSet);
+        }
+    }
+    return matchingSets;
 }
 
-vector<ArmorPiece> Engine::FindCandidates(qint16 skillId, qint16 minSkillLevel, ArmorPiece::ARMOR_TYPE type) {
-    vector<ArmorPiece> candidates;
-    vector<ArmorPiece> data;     // pointer to the group of pieces we want
+vector<Decoration> Engine::FindDecorations(SearchParameters & params) {
+    vector<Decoration> validDecos = vector<Decoration>();
+}
+
+bool Engine::ValidSetCheck(ArmorSet & armorSet, SearchParameters & parameters) {
+    SetReport report = SetReport(armorSet);
+    bool valid = true;
+    // Iterate through all the skills in the search parameters (top level iteration is important)
+    for (auto &setSkill : parameters.skillMap) {
+        // Check if the required skill is in the skill report
+        if (report.getSetTotals()->count(setSkill.first) > 0) {
+            // Now check if the requirement doesnt match so we can set the flag to false and go to the next set
+            // This algorithm assumes that the set matches until proven otherwise
+            if (setSkill.second < (*report.getSetTotals())[setSkill.first] ) {
+                valid = false;
+                break;
+            }
+        } else {
+            // Skill not in the set, skip it
+            valid = false;
+            break;
+        }
+    }
+    if (valid) {
+        qDebug("Found a valid set!");
+        return true;
+    }
+    return false;
+}
+
+vector<ArmorPiece *> Engine::FindCandidates(qint16 skillId, qint16 minSkillLevel, ArmorPiece::ARMOR_TYPE type) {
+    vector<ArmorPiece *> candidates;
+    vector<ArmorPiece *> data;     // pointer to the group of pieces we want
     int numObjects;
     switch (type) {
     case ArmorPiece::HEAD:
@@ -101,31 +139,29 @@ vector<ArmorPiece> Engine::FindCandidates(qint16 skillId, qint16 minSkillLevel, 
     }
     // Assumes that data will never be null here
     for (int i = 0; i < numObjects; i++) {
-        //TODO: get skill deco level and compare to armor slots.
-        if( data.at(i).ContainsSkill(skillId, minSkillLevel)) {
+        if( data.at(i)->ContainsSkill(skillId)) {
             candidates.push_back(data.at(i));
-            qDebug() << "Matched skill " << skillId << " to " << data.at(i).GetName();
+            qDebug() << "Matched skill " << skillId << " to " << data.at(i)->GetName();
         }
     }
 
     return candidates;
 }
 
-vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece> &headPieces,
-                                          vector<ArmorPiece> &bodyPieces,
-                                          vector<ArmorPiece> &armPieces,
-                                          vector<ArmorPiece> &waistPieces,
-                                          vector<ArmorPiece> &legPieces,
+vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
+                                          vector<ArmorPiece *> &bodyPieces,
+                                          vector<ArmorPiece *> &armPieces,
+                                          vector<ArmorPiece *> &waistPieces,
+                                          vector<ArmorPiece *> &legPieces,
                                           vector<Weapon> &weapons,
-                                          vector<Talisman> &talismans) {
+                                          vector<Talisman> &talismans,
+                                          qint16 maxSearchResults) {
     vector<ArmorSet> foundSets;
     int headIdx = 0;
     int bodyIdx = 0;
     int armIdx = 0;
     int waistIdx = 0;
     int legIdx = 0;
-    int weaponIdx = 0;
-    int taliIdx = 0;
     while(1) {
         // Do all the index parsing first before making a set
         /*
@@ -164,12 +200,18 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece> &headPieces,
         // Create the set
         Weapon weapon = Weapon(); // TODO:
         Talisman tali = Talisman(); // TODO:
-        ArmorSet tempSet = ArmorSet(headPieces.at(headIdx),
-                                    bodyPieces.at(bodyIdx),
-                                    armPieces.at(armIdx),
-                                    waistPieces.at(waistIdx),
-                                    legPieces.at(legIdx),
+        auto fittedHead = FittedArmorPiece(headPieces.at(headIdx));
+        auto fittedBody = FittedArmorPiece(bodyPieces.at(bodyIdx));
+        auto fittedArm = FittedArmorPiece(armPieces.at(armIdx));
+        auto fittedWaist =  FittedArmorPiece(waistPieces.at(waistIdx));
+        auto fittedLegs = FittedArmorPiece(legPieces.at(legIdx));
+        ArmorSet tempSet = ArmorSet(fittedHead,
+                                    fittedBody,
+                                    fittedArm,
+                                    fittedWaist,
+                                    fittedLegs,
                                     tali);
+
         foundSets.push_back(tempSet);
 
         // Increment the lowest order category

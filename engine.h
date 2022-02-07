@@ -6,6 +6,8 @@
 #include "equipmentdatabase.h"
 #include "armorset.h"
 #include "searchparameters.h"
+#include "setreport.h"
+#include "fittedarmorpiece.h"
 #include <algorithm>
 
 /**
@@ -42,18 +44,32 @@ private:
      * @param Minimum level of the skill
      * @return vector containing pointers to the armor pieces in the database
      */\
-    vector<ArmorPiece> FindCandidates(qint16 skillId, qint16 minSkillLevel, ArmorPiece::ARMOR_TYPE type);
+    vector<ArmorPiece *> FindCandidates(qint16 skillId, qint16 minSkillLevel, ArmorPiece::ARMOR_TYPE type);
+    /**
+     * @brief Gets all the decorations that fit the search parameters.
+     * @param params Search parameters to use
+     * @return
+     */
+    vector<Decoration> FindDecorations(SearchParameters & params);
     /**
      * @brief 7-set cartesian product
      * @return Vector of armorsets such that there is every single combination of the input sets such that one from each category is chosen
      */
-    vector<ArmorSet> CartesianProduct(vector<ArmorPiece> &headPieces,
-                                        vector<ArmorPiece> &bodyPieces,
-                                        vector<ArmorPiece> &armPieces,
-                                        vector<ArmorPiece> &waistPieces,
-                                        vector<ArmorPiece> &legPieces,
+    vector<ArmorSet> CartesianProduct(vector<ArmorPiece*> &headPieces,
+                                        vector<ArmorPiece*> &bodyPieces,
+                                        vector<ArmorPiece*> &armPieces,
+                                        vector<ArmorPiece*> &waistPieces,
+                                        vector<ArmorPiece*> &legPieces,
                                         vector<Weapon> &weapons,
-                                        vector<Talisman> &talismans);
+                                        vector<Talisman> &talismans,
+                                        qint16 maxSearchResults);
+    /**
+     * @brief Checks whether the armorset matches the set search parameters
+     * @param armorSet The armor set
+     * @param parameters The search parameters
+     * @return
+     */
+    bool ValidSetCheck(ArmorSet & armorSet, SearchParameters & parameters);
 };
 
 #endif // ENGINE_H

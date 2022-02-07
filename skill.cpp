@@ -15,3 +15,10 @@ Skill::Skill(qint16 id) {
     this->skillID = id;
     this->maxSkillLevel = 7;
 }
+QString Skill::GetSkillName() {
+    return this->name;
+}
+
+qint16 Skill::GetSkillId() {
+    return this->skillID;
+}

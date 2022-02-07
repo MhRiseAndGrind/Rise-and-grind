@@ -21,7 +21,7 @@ public:
      * @brief Generic of the desired skill IDs (key) and the desired skill level (Value);
      * @return
      */
-    QMap<qint16, qint16> skillMap;
+    std::map<qint16, qint16> skillMap;
     vector<int> skillIds;
     vector<int> skillLevels;
 signals:

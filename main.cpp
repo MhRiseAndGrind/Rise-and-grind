@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     engine.load(url);
     SearchParameters p;
     p.AddSkill(71, 2);
+    p.AddSkill(24, 1);
     setEngine.FindSets(p, 10);
     return app.exec();
 }

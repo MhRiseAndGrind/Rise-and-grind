@@ -11,6 +11,16 @@ public:
     explicit Skill();
     Skill(qint16 id, QString name);
     Skill(qint16 id);
+    /**
+     * @brief Get the name of the skill
+     * @return
+     */
+    QString GetSkillName();
+    /**
+     * @brief Get the ID of the skill
+     * @return
+     */
+    qint16 GetSkillId();
 private:
     /**
      * @brief ID of the skill (internal use)

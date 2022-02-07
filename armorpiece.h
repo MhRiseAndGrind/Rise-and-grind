@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <vector>
+#include <map>
 #include "skill.h"
 #include "decoration.h"
 using namespace::std;
@@ -27,18 +28,31 @@ public:
      * @param Number of skills the piece has
      * @param size-3 array of the slots the armor piece has
      */
-    // TODO: Should i use a qvector for skills or keep it as an array
     ArmorPiece(qint16 id,
                QString name,
                ARMOR_TYPE type,
-               qint16 * skillIds,
-               qint16 * skillLevels,
-               qint16 numSkills,
-               qint16 * decoSlots);
+               vector<qint16> skillIds,
+               vector<qint16> skillLevels,
+               vector<qint16> decoSlots,
+               vector<Skill *> skill);
+    ~ArmorPiece();
     qint16 GetId();
     qint16 GetLevel();
-    bool ContainsSkill(qint16 id, qint16 minLevel);
+    /**
+     * @brief Checks whether the skill ID exists on the armor piece
+     * @param id
+     * @return
+     */
+    bool ContainsSkill(qint16 id);
     QString GetName();
+    /**
+     * @brief Map the skill IDs and the levels
+     * @return
+     */
+    std::map<qint16, qint16> getSkills();
+    qint16 getSlotLevelA();
+    qint16 getSlotLevelB();
+    qint16 getSlotLevelC();
 private:
     /**
      * @brief What slot the armor piece goes to
@@ -53,23 +67,32 @@ private:
      */
     QString name;
     /**
-      * @brief Skills the armor has
-      */
-    vector<qint16> skillIDs;
+     * @brief Vector of reference to the pieces innate skills
+     */
+    vector<Skill *> skillList;
 
     /**
-     * @brief Levels of each skill, corresponding to the same IDXs as the IDs array
+     * @brief Map<Skill ID, Level> of skills the armor piece has
      */
-    vector<qint16> skillLevels;
+    map<qint16, qint16> armorSkills;
 
     /**
       * @brief Slot levels the armor piece has
       */
     qint16 decoSlots[3];
+
     /**
-     * @brief The decorations applied to the armor piece
+     * @brief Decoration A slot level
      */
-    Decoration decos[3];
+    qint16 decoSlotLevelA;
+    /**
+     * @brief Decoration B slot level
+     */
+    qint16 decoSlotLevelB;
+    /**
+     * @brief Decoration C slot level
+     */
+    qint16 decoSlotLevelC;
 
     qint16 defenceMin;
     qint16 defenceMax;

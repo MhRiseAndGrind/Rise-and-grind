@@ -12,8 +12,10 @@ SOURCES += \
         decoration.cpp \
         engine.cpp \
         equipmentdatabase.cpp \
+        fittedarmorpiece.cpp \
         main.cpp \
         searchparameters.cpp \
+        setreport.cpp \
         skill.cpp \
         talisman.cpp \
         weapon.cpp
@@ -37,7 +39,9 @@ HEADERS += \
     decoration.h \
     engine.h \
     equipmentdatabase.h \
+    fittedarmorpiece.h \
     searchparameters.h \
+    setreport.h \
     skill.h \
     talisman.h \
     weapon.h

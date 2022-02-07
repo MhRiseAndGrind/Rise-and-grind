@@ -1,0 +1,53 @@
+#include "fittedarmorpiece.h"
+
+FittedArmorPiece::FittedArmorPiece()
+{
+    this->decorations = std::vector<Decoration>();
+}
+
+FittedArmorPiece::FittedArmorPiece(ArmorPiece * armor, std::vector<Decoration> & decos) {
+    this->armorPiece = armor;
+    this->decorations = decos;
+}
+
+FittedArmorPiece::FittedArmorPiece(ArmorPiece * armor) {
+    this->armorPiece = armor;
+    this->decorations = std::vector<Decoration>();
+}
+
+void FittedArmorPiece::PutDecoration(qint16 slot, Decoration &d) {
+    // Check if the slot level matches the desired decoration's level
+    qint16 slotLevel = 0;
+    switch (slot) {
+    case 0:
+        slotLevel = this->armorPiece->getSlotLevelA();
+        break;
+    case 1:
+        slotLevel = this->armorPiece->getSlotLevelB();
+        break;
+    case 2:
+        slotLevel = this->armorPiece->getSlotLevelC();
+        break;
+    }
+    if (d.getDecoLevel() >= slotLevel) {
+        qDebug("Can not fit decoration! Level too high for slot!");
+    } else {
+        // Slot the decoration
+        switch (slot) {
+        case 0:
+            this->decoA = d;
+            break;
+        case 1:
+            this->decoB = d;
+            break;
+        case 2:
+            this->decoC = d;
+            break;
+        }
+        qDebug("Slotted the decoration into slot %d" , slot);
+    }
+}
+
+ArmorPiece * FittedArmorPiece::GetArmorPiece() {
+    return this->armorPiece;
+}
