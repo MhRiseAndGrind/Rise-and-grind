@@ -35,7 +35,6 @@ public:
                vector<qint16> skillLevels,
                vector<qint16> decoSlots,
                vector<Skill *> skill);
-    ~ArmorPiece();
     qint16 GetId();
     qint16 GetLevel();
     /**

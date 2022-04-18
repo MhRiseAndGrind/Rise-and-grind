@@ -19,6 +19,11 @@ public:
      */
     Decoration(qint16 decoId, qint16 slotLevel, Skill & skill, QString name);
     qint16 getDecoLevel();
+    /**
+     * @brief Gets the reference to the skill the deco points to
+     * @return
+     */
+    Skill * getDecoSkill();
     ~Decoration();
 private:
     /**

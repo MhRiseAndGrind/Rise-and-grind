@@ -42,6 +42,18 @@ public:
      * @return reference to the skill that has been loaded
      */
     Skill * FindSkillById(qint16 id);
+    /**
+     * @brief Gets the decoration at the index it was loaded into memory
+     * @param id
+     * @return
+     */
+    Decoration * FindDecoById(qint16 id);
+    /**
+     * @brief Gets the decoration that corresponds to a certain skill by its ID
+     * @param skillId
+     * @return
+     */
+    Decoration * FindDecoBySkillId(qint16 skillId);
 private:
     qint16 LoadArmor();
     /**

@@ -15,5 +15,9 @@ Decoration::~Decoration() {
 }
 
 qint16 Decoration::getDecoLevel() {
-    return this->getDecoLevel();
+    return decoLevel;
+}
+
+Skill * Decoration::getDecoSkill() {
+    return skill;
 }

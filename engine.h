@@ -23,7 +23,7 @@ public:
      * @brief Engine Constructor
      * @param Reference to a database object with the loaded data
      */
-    Engine(EquipmentDatabase &database);
+    Engine(EquipmentDatabase * database);
     /**
      * @brief Find a max of N valid sets given the search parameters
      * @param Search Parameters with desired skills
@@ -48,9 +48,18 @@ private:
     /**
      * @brief Gets all the decorations that fit the search parameters.
      * @param params Search parameters to use
-     * @return
+     * @return Vector of pointers to the decoration object in the database.
      */
-    vector<Decoration> FindDecorations(SearchParameters & params);
+    vector<Decoration *> FindDecorations(SearchParameters & params);
+
+    /**
+     * @brief Creates a permutation of all possible decoration combinations onto the given set.
+     * Each decoroation may be used N number of times.
+     * @param set The armor set to apply decorations to
+     * @param d The vector of decorations to use
+     * @return A list of armorsets that contain the same armor pieces but with every permutation of decorations given by d.
+     */
+    vector<ArmorSet> PermutateDecorations(ArmorSet & set, vector<Decoration *> d);
     /**
      * @brief 7-set cartesian product
      * @return Vector of armorsets such that there is every single combination of the input sets such that one from each category is chosen
@@ -62,7 +71,8 @@ private:
                                         vector<ArmorPiece*> &legPieces,
                                         vector<Weapon> &weapons,
                                         vector<Talisman> &talismans,
-                                        qint16 maxSearchResults);
+                                        qint16 maxSearchResults,
+                                        SearchParameters & params);
     /**
      * @brief Checks whether the armorset matches the set search parameters
      * @param armorSet The armor set

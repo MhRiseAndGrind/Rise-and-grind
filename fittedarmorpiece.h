@@ -28,15 +28,20 @@ public:
     ArmorPiece * GetArmorPiece();
     /**
      * @brief Applies a decoration to the armor piece
-     * @param slot Slot to put the decoration in
+     * @param slot Slot to put the decoration in (1, 2 or 3)
      * @param d reference to the Decoration to add
      */
-    void PutDecoration(qint16 slot, Decoration & d);
+    void PutDecoration(qint16 slot, Decoration * d);
+
     /**
      * @brief Returns the validity of the armor piece
      * @return
      */
     bool GetValidSet();
+
+    Decoration * getDecoA();
+    Decoration * getDecoB();
+    Decoration * getDecoC();
 private:
     /**
      * @brief Reference to the armor piece in the equipment database
@@ -48,9 +53,9 @@ private:
      */
     std::vector<Decoration> decorations;
 
-    Decoration decoA;
-    Decoration decoB;
-    Decoration decoC;
+    Decoration * decoA;
+    Decoration * decoB;
+    Decoration * decoC;
 
     /**
      * @brief Validates that the decorations fitted can actually be fitted

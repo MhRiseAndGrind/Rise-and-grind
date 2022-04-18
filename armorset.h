@@ -11,8 +11,7 @@
 
 using namespace::std;
 /**
- * @brief Data structure for a whole armor set. Each piece should onyl ever be a reference to the piece in
- * the initial database loaded at runtime
+ * @brief Data class for a whole armor set.
  */
 class ArmorSet
 {
@@ -35,6 +34,17 @@ public:
     FittedArmorPiece getArmPiece();
     FittedArmorPiece getWaistPiece();
     FittedArmorPiece getLegPiece();
+
+    /**
+     * @brief Gets all the armor pieces as a convenient list
+     * @return
+     */
+    vector<FittedArmorPiece *> getArmorList();
+    /**
+     * @brief Appends skillIDs across the armorset along with total skill level
+     * @return
+     */
+    map<qint16, qint16> getSkillLevels();
 
 private:
     FittedArmorPiece headArmor;

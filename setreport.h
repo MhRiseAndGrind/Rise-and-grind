@@ -11,7 +11,7 @@ class SetReport
 {
 public:
     SetReport(ArmorSet & armorSet);
-    std::map<qint16, qint16> * getSetTotals();
+    std::map<qint16, qint16> getSetTotals();
     /**
      * @brief Clears all memory allocated by the object only
      */
@@ -20,7 +20,7 @@ private:
     /**
      * @brief Set skill totals mapping the skill's ID to its total value
      */
-    std::map<qint16, qint16> * setTotal;
+    std::map<qint16, qint16> setTotal;
     /**
      * @brief Pointer to the armorset to generate a report from
      */

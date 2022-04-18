@@ -9,9 +9,9 @@ int main(int argc, char *argv[])
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-    EquipmentDatabase d;
+    EquipmentDatabase * d = new EquipmentDatabase();
     Engine setEngine(d);
-    d.LoadData();
+    d->LoadData();
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     SearchParameters p;
     p.AddSkill(71, 2);
     p.AddSkill(24, 1);
+    p.AddSkill(37, 1);
     setEngine.FindSets(p, 10);
     return app.exec();
 }

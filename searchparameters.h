@@ -16,7 +16,6 @@ class SearchParameters : public QObject
 public:
     explicit SearchParameters(QObject *parent = nullptr);
     void AddSkill(qint16 id, qint16 value);
-
     /**
      * @brief Generic of the desired skill IDs (key) and the desired skill level (Value);
      * @return

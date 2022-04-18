@@ -229,3 +229,16 @@ Skill * EquipmentDatabase::FindSkillById(qint16 id) {
     Skill * skill = this->skills.at(id);
     return skill;
 }
+
+Decoration * EquipmentDatabase::FindDecoById(qint16 id) {
+    return this->decorations.at(id);
+}
+
+Decoration * EquipmentDatabase::FindDecoBySkillId(qint16 skillId) {
+    for (Decoration * d : decorations) {
+        if (d->getDecoSkill()->GetSkillId() == skillId) {
+            return d;
+        }
+    }
+    return NULL;
+}

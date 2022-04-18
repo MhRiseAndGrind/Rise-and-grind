@@ -2,10 +2,13 @@
 
 ArmorPiece::ArmorPiece()
 {
-
-}
-ArmorPiece::~ArmorPiece() {
-
+    this->defenceMin = 0;
+    this->defenceMax = 0;
+    this->fireRes = 0;
+    this->waterRes = 0;
+    this->lightRes = 0;
+    this->iceRes = 0;
+    this->dragonRes = 0;
 }
 ArmorPiece::ArmorPiece(qint16 id,
                        QString name,
@@ -25,7 +28,19 @@ ArmorPiece::ArmorPiece(qint16 id,
     this->decoSlots[0] = decoSlots[0];
     this->decoSlots[1] = decoSlots[1];
     this->decoSlots[2] = decoSlots[2];
+
+    this->decoSlotLevelA = decoSlots[0];
+    this->decoSlotLevelB = decoSlots[1];
+    this->decoSlotLevelC = decoSlots[2];
     this->skillList = skills;
+
+    this->defenceMin = 0;
+    this->defenceMax = 0;
+    this->fireRes = 0;
+    this->waterRes = 0;
+    this->lightRes = 0;
+    this->iceRes = 0;
+    this->dragonRes = 0;
 }
 
 qint16 ArmorPiece::GetId() {

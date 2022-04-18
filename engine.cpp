@@ -5,8 +5,8 @@ Engine::Engine(QObject *parent) : QObject(parent)
 
 }
 
-Engine::Engine(EquipmentDatabase &d) {
-    this->database = &d;
+Engine::Engine(EquipmentDatabase * d) {
+    this->database = d;
 }
 
 vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
@@ -19,6 +19,7 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
     vector<ArmorPiece *> armsCandidates;
     vector<ArmorPiece *> waistCandidates;
     vector<ArmorPiece *> legsCandidates;
+    vector<Decoration *> decorationCandidates;
     vector<Weapon> weaponCandidates;
     vector<Talisman> talismanCandidates;
     // Go over every skill and level and append them to the appropriate vector
@@ -63,24 +64,24 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
                                          legsCandidates,
                                          weaponCandidates,
                                          talismanCandidates,
-                                         maxCount);
+                                         maxCount,
+                                         params);
     qDebug() << "Found" << foundSets.size() << "unique sets";
-    // Now filter the sets based on our search parameters
-    // Since the initial set search accounted for any skill levels of the skills we want
-    // we now all the sets that at least match the skill levels we want
-
-    // Create a convenient report of all of the found sets
-    vector<ArmorSet> matchingSets = vector<ArmorSet>();
-    for (auto & armorSet : foundSets) {
-        if (ValidSetCheck(armorSet, params)) {
-            matchingSets.push_back(armorSet);
-        }
-    }
-    return matchingSets;
+    return foundSets;
 }
 
-vector<Decoration> Engine::FindDecorations(SearchParameters & params) {
-    vector<Decoration> validDecos = vector<Decoration>();
+vector<Decoration *> Engine::FindDecorations(SearchParameters & params) {
+    vector<Decoration *> validDecos = vector<Decoration *>();
+    // Go through the search parameter skills
+    for (Skill skill : params.skillIds) {
+         validDecos.push_back(this->database->FindDecoById(skill.GetSkillId()));
+    }
+    return validDecos;
+}
+
+vector<ArmorSet> Engine::PermutateDecorations(ArmorSet & set, vector<Decoration *> d) {
+    std::vector<ArmorSet> setsWithDecos = std::vector<ArmorSet>();
+
 }
 
 bool Engine::ValidSetCheck(ArmorSet & armorSet, SearchParameters & parameters) {
@@ -89,10 +90,10 @@ bool Engine::ValidSetCheck(ArmorSet & armorSet, SearchParameters & parameters) {
     // Iterate through all the skills in the search parameters (top level iteration is important)
     for (auto &setSkill : parameters.skillMap) {
         // Check if the required skill is in the skill report
-        if (report.getSetTotals()->count(setSkill.first) > 0) {
+        if (report.getSetTotals().count(setSkill.first) > 0) {
             // Now check if the requirement doesnt match so we can set the flag to false and go to the next set
             // This algorithm assumes that the set matches until proven otherwise
-            if (setSkill.second < (*report.getSetTotals())[setSkill.first] ) {
+            if (setSkill.second < (report.getSetTotals())[setSkill.first] ) {
                 valid = false;
                 break;
             }
@@ -155,8 +156,10 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
                                           vector<ArmorPiece *> &legPieces,
                                           vector<Weapon> &weapons,
                                           vector<Talisman> &talismans,
-                                          qint16 maxSearchResults) {
+                                          qint16 maxSearchResults,
+                                          SearchParameters & params) {
     vector<ArmorSet> foundSets;
+    int foundSetCount = 0;
     int headIdx = 0;
     int bodyIdx = 0;
     int armIdx = 0;
@@ -211,8 +214,90 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
                                     fittedWaist,
                                     fittedLegs,
                                     tali);
+        /*
+         * TODO: Check if the armorset meets the requirements
+         * If it doesn't, then check the distance between the search parameters and the set
+         * Attempt to fill decorations until it meets the requirements
+         *
+         * If it does meet the requirements then add it to the found sets vector
+         */
 
-        foundSets.push_back(tempSet);
+
+        if (ValidSetCheck(tempSet, params)) {
+            // Set valid and matches, no need to check for decorations
+            foundSets.push_back(tempSet);
+            foundSetCount++;
+        } else {
+            // Need to try and add decorations or talismans
+            // So iterate through each desired skill, get the difference
+            // between what is desired and what is available
+            // and attempt to fit decorations to the armor pieces
+
+            // Ths while should keep the loop running until there are
+            // no more valid slots to add decos to
+
+            // Unoptimized brute force deco adding method
+            bool validSet = false;
+            while (!validSet) {
+                // Check var whether a decoration was added
+                bool addedDeco = false;
+                for (qint16 skillId : params.skillIds) {
+                    qint16 desiredSkillVal = params.skillMap.at(skillId);
+                    qint16 currentSkillVal = 0;
+                    qint16 difference;
+
+                    map<qint16, qint16> setSkillMap = tempSet.getSkillLevels();
+                    if (setSkillMap.count(skillId)) {
+                        currentSkillVal = setSkillMap[skillId];
+                    }
+
+                    // Get the difference from what we want with what is there
+                    difference = desiredSkillVal - currentSkillVal;
+
+                    // If there is a difference then that means we have to add decorations
+                    if (difference > 0) {
+                        // Start with decoration A
+                        // Slot a decoration within the first open valid slot
+                        // If there are no available slots and the set still is
+                        // not valid then the set must be discarded
+
+                        for (auto armor : tempSet.getArmorList()) {
+                            Decoration * d = database->FindDecoBySkillId(skillId);
+                            // empty slots SHOULD be null
+                            if (armor->getDecoA() == NULL && armor->GetArmorPiece()->getSlotLevelA() >= d->getDecoLevel()) {
+                                armor->PutDecoration(0, d);
+                                addedDeco = true;
+                            } else if (armor->getDecoB() == NULL && armor->GetArmorPiece()->getSlotLevelB() >= d->getDecoLevel()) {
+                                armor->PutDecoration(1, d);
+                                addedDeco = true;
+                            } else if (armor->getDecoC() == NULL && armor->GetArmorPiece()->getSlotLevelC() >= d->getDecoLevel()) {
+                                armor->PutDecoration(2, d);
+                                addedDeco = true;
+                            }
+                        }
+                    }
+                }
+                // Check if it is a valid set yet
+                if (ValidSetCheck(tempSet, params)) {
+                    validSet = true;
+                    break;
+                }
+
+                // break out of the while loop if no deco was added
+                // this assumes that after iterating through all decos and none were fitted
+                // then there are no more open slots
+                if (!addedDeco) {
+                    break;
+                }
+            }
+            if (validSet) {
+                foundSets.push_back(tempSet);
+                foundSetCount++;
+            }
+        }
+
+        if (foundSetCount >= maxSearchResults)
+            break;
 
         // Increment the lowest order category
         legIdx++;
