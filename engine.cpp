@@ -165,14 +165,13 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
     int armIdx = 0;
     int waistIdx = 0;
     int legIdx = 0;
+    int taliIdx = 0;
     while(1) {
         // Do all the index parsing first before making a set
-        /*
         if (taliIdx == (int) talismans.size()) {    // Talisman index
             taliIdx = 0;
-            weaponIdx++;
+            legIdx++;
         }
-        */
         /*
         if (weaponIdx == (int) weapons.size()) {
             weaponIdx = 0;
@@ -241,6 +240,7 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
             while (!validSet) {
                 // Check var whether a decoration was added
                 bool addedDeco = false;
+                // Iterate over all skills we are searching for
                 for (qint16 skillId : params.skillIds) {
                     qint16 desiredSkillVal = params.skillMap.at(skillId);
                     qint16 currentSkillVal = 0;
@@ -300,7 +300,7 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
             break;
 
         // Increment the lowest order category
-        legIdx++;
+        taliIdx++;
     }
 
     return foundSets;
