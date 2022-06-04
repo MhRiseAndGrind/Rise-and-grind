@@ -19,9 +19,8 @@ vector<ArmorSet> Engine::FindSets(SearchParameters &params, qint16 maxCount) {
     vector<ArmorPiece *> armsCandidates;
     vector<ArmorPiece *> waistCandidates;
     vector<ArmorPiece *> legsCandidates;
-    vector<Decoration *> decorationCandidates;
     vector<Weapon> weaponCandidates;
-    vector<Talisman> talismanCandidates;
+    vector<Talisman *> talismanCandidates = findTalismans(params);
     // Go over every skill and level and append them to the appropriate vector
     for (int i = 0; i < (int) params.skillLevels.size(); i++) {
         auto headTmp = FindCandidates(params.skillIds[i], 1, ArmorPiece::HEAD);
@@ -77,11 +76,6 @@ vector<Decoration *> Engine::FindDecorations(SearchParameters & params) {
          validDecos.push_back(this->database->FindDecoById(skill.GetSkillId()));
     }
     return validDecos;
-}
-
-vector<ArmorSet> Engine::PermutateDecorations(ArmorSet & set, vector<Decoration *> d) {
-    std::vector<ArmorSet> setsWithDecos = std::vector<ArmorSet>();
-
 }
 
 bool Engine::ValidSetCheck(ArmorSet & armorSet, SearchParameters & parameters) {
@@ -149,13 +143,26 @@ vector<ArmorPiece *> Engine::FindCandidates(qint16 skillId, qint16 minSkillLevel
     return candidates;
 }
 
+vector<Talisman *> Engine::findTalismans(SearchParameters & searchParams)  {
+    vector<Talisman *> foundTalismans = vector<Talisman *>();
+    for (auto skill : searchParams.skillIds) {
+        for (auto talisman : database->getTalismans()) {
+            if (talisman->getSkillLevels().count(skill) > 0) {
+                foundTalismans.push_back(talisman);
+            }
+        }
+    }
+    return foundTalismans;
+
+}
+
 vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
                                           vector<ArmorPiece *> &bodyPieces,
                                           vector<ArmorPiece *> &armPieces,
                                           vector<ArmorPiece *> &waistPieces,
                                           vector<ArmorPiece *> &legPieces,
                                           vector<Weapon> &weapons,
-                                          vector<Talisman> &talismans,
+                                          vector<Talisman *> &talismans,
                                           qint16 maxSearchResults,
                                           SearchParameters & params) {
     vector<ArmorSet> foundSets;
@@ -201,7 +208,7 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
         // Head is the slowest moving
         // Create the set
         Weapon weapon = Weapon(); // TODO:
-        Talisman tali = Talisman(); // TODO:
+        Talisman * tali = talismans.at(taliIdx);
         auto fittedHead = FittedArmorPiece(headPieces.at(headIdx));
         auto fittedBody = FittedArmorPiece(bodyPieces.at(bodyIdx));
         auto fittedArm = FittedArmorPiece(armPieces.at(armIdx));
@@ -213,14 +220,6 @@ vector<ArmorSet> Engine::CartesianProduct(vector<ArmorPiece *> &headPieces,
                                     fittedWaist,
                                     fittedLegs,
                                     tali);
-        /*
-         * TODO: Check if the armorset meets the requirements
-         * If it doesn't, then check the distance between the search parameters and the set
-         * Attempt to fill decorations until it meets the requirements
-         *
-         * If it does meet the requirements then add it to the found sets vector
-         */
-
 
         if (ValidSetCheck(tempSet, params)) {
             // Set valid and matches, no need to check for decorations

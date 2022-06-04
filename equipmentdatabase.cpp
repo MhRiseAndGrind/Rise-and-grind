@@ -224,6 +224,9 @@ vector<ArmorPiece *> EquipmentDatabase::GetWaistPieces() {
 vector<ArmorPiece *> EquipmentDatabase::GetLegPieces() {
     return this->legArmorPieces;
 }
+vector<Talisman *> EquipmentDatabase::getTalismans() {
+    return this->talismans;
+}
 
 Skill * EquipmentDatabase::FindSkillById(qint16 id) {
     Skill * skill = this->skills.at(id);

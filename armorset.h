@@ -22,7 +22,7 @@ public:
               FittedArmorPiece &arm,
               FittedArmorPiece &waist,
               FittedArmorPiece &leg,
-              Talisman &talisman);
+              Talisman * talisman);
     /**
      * @brief Add a decoration to the set list
      * @param Reference to a decoration object
@@ -53,7 +53,7 @@ private:
     FittedArmorPiece waistArmor;
     FittedArmorPiece legArmor;
 
-    Talisman talisman;
+    Talisman * talisman;
 };
 
 #endif // ARMORSET_H

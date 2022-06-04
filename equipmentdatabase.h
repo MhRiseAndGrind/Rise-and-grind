@@ -36,6 +36,7 @@ public:
     vector<ArmorPiece *> GetArmPieces();
     vector<ArmorPiece *> GetWaistPieces();
     vector<ArmorPiece *> GetLegPieces();
+    vector<Talisman *> getTalismans();
     /**
      * @brief Gets the skill at index
      * @param id ID of the skill
@@ -65,6 +66,11 @@ private:
     qint16 LoadSkills();
     qint16 LoadDecorations();
     /**
+     * @brief Loads all talismans from the talisman database file
+     * @return
+     */
+    qint16 LoadTalismans();
+    /**
      * @brief Parses slots into an array from a pipe-delimited string
      * @param The string to parse (E.G. 3|2|0)
      * @return Pointer to size-3 array on stack with int values
@@ -89,8 +95,8 @@ private:
     vector<ArmorPiece *> waistArmorPieces;
     vector<ArmorPiece *> legArmorPieces;
 
-    vector<Weapon> weapons;
-    vector<Talisman> talismans;
+    vector<Weapon *> weapons;
+    vector<Talisman *> talismans;
     vector<Decoration *> decorations;
     /**
      * @brief Vector of skills loaded into memory from a file.

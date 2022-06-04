@@ -14,7 +14,7 @@ ArmorSet::ArmorSet(FittedArmorPiece &head,
                    FittedArmorPiece &arm,
                    FittedArmorPiece &waist,
                    FittedArmorPiece &leg,
-                   Talisman &talisman) {
+                   Talisman * talisman) {
     ArmorSet::headArmor = head;
     ArmorSet::bodyArmor = body;
     ArmorSet::armArmor = arm;

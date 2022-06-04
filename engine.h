@@ -61,6 +61,12 @@ private:
      */
     vector<ArmorSet> PermutateDecorations(ArmorSet & set, vector<Decoration *> d);
     /**
+     * @brief Finds all talismans with the skills specified by the search parameters
+     * @param Search parameters to use
+     * @return Vector or talisman pointers from the master database
+     */
+    vector<Talisman *> findTalismans(SearchParameters & params);
+    /**
      * @brief 7-set cartesian product
      * @return Vector of armorsets such that there is every single combination of the input sets such that one from each category is chosen
      */
@@ -70,7 +76,7 @@ private:
                                         vector<ArmorPiece*> &waistPieces,
                                         vector<ArmorPiece*> &legPieces,
                                         vector<Weapon> &weapons,
-                                        vector<Talisman> &talismans,
+                                        vector<Talisman *> &talismans,
                                         qint16 maxSearchResults,
                                         SearchParameters & params);
     /**
